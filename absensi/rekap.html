@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Absensi Siswa</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+
+<body class="bg-gradient">
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Absensi Sekolah</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Daftar Siswa</a></li>
+                    <li class="nav-item"><a class="nav-link" href="absensi.html">Absensi</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="rekap.html">Rekap</a></li>
+                    <li class="nav-item">
+                        <button id="themeToggle" class="btn btn-sm theme-btn">
+                            <i class="bi bi-moon-fill"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Rekap Absensi Siswa</h2>
+
+        <!-- Filter dan Pencarian -->
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Cari Nama/NIS</label>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Ketik nama atau NIS...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Dari Tanggal</label>
+                        <input type="date" class="form-control" id="startDate">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Sampai Tanggal</label>
+                        <input type="date" class="form-control" id="endDate">
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" id="filterButton">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
+                        <button class="btn btn-outline-secondary ms-2" id="resetButton">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistik -->
+        <div class="row mb-4" id="statsContainer">
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Hadir</h5>
+                        <p class="card-text fs-2" id="hadirCount">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Izin</h5>
+                        <p class="card-text fs-2" id="izinCount">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Sakit</h5>
+                        <p class="card-text fs-2" id="sakitCount">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Alpa</h5>
+                        <p class="card-text fs-2" id="alpaCount">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabel Rekap -->
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" id="tabelRekap">
+                        <thead>
+                            <tr>
+                                <th>NIS</th>
+                                <th>Nama</th>
+                                <th>Hadir</th>
+                                <th>Izin</th>
+                                <th>Sakit</th>
+                                <th>Alpa</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load data rekap saat halaman dimuat
+            loadRekapData();
+
+            // Filter data
+            document.getElementById('filterButton').addEventListener('click', loadRekapData);
+            document.getElementById('resetButton').addEventListener('click', () => {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('startDate').value = '';
+                document.getElementById('endDate').value = '';
+                loadRekapData();
+            });
+        });
+
+        // Format tanggal untuk filter
+        function formatDate(dateString) {
+            if (!dateString) return null;
+            const date = new Date(dateString);
+            return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().split('T')[0];
+        }
+
+        // Load data rekap dari Google Sheets
+        function loadRekapData() {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwVkwFp-dl9btraUXC8ugAFuAEeODAtDSYVoAsIuJH-wHxD-kuI8HMw-Fuf2g2RqLT2/exec'; // Ganti dengan URL Web App Anda
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const startDate = formatDate(document.getElementById('startDate').value);
+            const endDate = formatDate(document.getElementById('endDate').value);
+            showLoading();
+
+            fetch(`${scriptURL}?action=getRekap`)
+                .then(response => response.json())
+                .then(data => {
+                    // Proses data absensi
+                    const rekap = {};
+                    const today = new Date().toISOString().split('T')[0];
+
+                    data.forEach(row => {
+                        const [timestamp, nis, nama, status, keterangan] = row;
+                        const absenDate = timestamp.split(' ')[0]; // Ambil tanggal saja
+
+                        // Filter berdasarkan tanggal
+                        if (startDate && absenDate < startDate) return;
+                        if (endDate && absenDate > endDate) return;
+
+                        if (!rekap[nis]) {
+                            rekap[nis] = {
+                                nama: nama,
+                                hadir: 0,
+                                izin: 0,
+                                sakit: 0,
+                                alpa: 0
+                            };
+                        }
+
+                        // Hitung status
+                        if (status === 'Hadir') rekap[nis].hadir++;
+                        else if (status === 'Izin') rekap[nis].izin++;
+                        else if (status === 'Sakit') rekap[nis].sakit++;
+                        else if (status === 'Tanpa Keterangan') rekap[nis].alpa++;
+                    });
+
+                    // Filter berdasarkan pencarian
+                    const filteredData = Object.entries(rekap)
+                        .filter(([nis, data]) => {
+                            return (
+                                nis.toLowerCase().includes(searchQuery) ||
+                                data.nama.toLowerCase().includes(searchQuery)
+                            );
+                        });
+
+                    // Update statistik
+                    updateStatistics(filteredData);
+
+                    // Tampilkan di tabel
+                    const tabelBody = document.querySelector('#tabelRekap tbody');
+                    tabelBody.innerHTML = '';
+
+                    filteredData.forEach(([nis, data]) => {
+                        const total = data.hadir + data.izin + data.sakit + data.alpa;
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+              <td>${nis}</td>
+              <td>${data.nama}</td>
+              <td>${data.hadir}</td>
+              <td>${data.izin}</td>
+              <td>${data.sakit}</td>
+              <td>${data.alpa}</td>
+              <td><strong>${total}</strong></td>
+            `;
+                        tabelBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error:', error))
+                .finally(() => hideLoading());
+        }
+
+        // Update statistik
+        function updateStatistics(data) {
+            let hadir = 0, izin = 0, sakit = 0, alpa = 0;
+
+            data.forEach(([_, row]) => {
+                hadir += row.hadir;
+                izin += row.izin;
+                sakit += row.sakit;
+                alpa += row.alpa;
+            });
+
+            document.getElementById('hadirCount').textContent = hadir;
+            document.getElementById('izinCount').textContent = izin;
+            document.getElementById('sakitCount').textContent = sakit;
+            document.getElementById('alpaCount').textContent = alpa;
+        }
+    </script>
+
+    <div id="loadingIndicator" class="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+</body>
+
+</html>
