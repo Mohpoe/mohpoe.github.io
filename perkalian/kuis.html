@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Perkalian</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <div class="sidebar" id="sidebar">
+            <h2>Pengaturan Kuis</h2>
+
+            <div class="sidebar-section">
+                <h3>Tingkat Kesulitan</h3>
+                <label>
+                    <input type="radio" name="difficulty" value="satuan" checked> Satuan (1-9)
+                </label>
+                <label>
+                    <input type="radio" name="difficulty" value="puluhan"> Puluhan (10-99)
+                </label>
+                <label>
+                    <input type="radio" name="difficulty" value="ratusan"> Ratusan (100-999)
+                </label>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Statistik</h3>
+                <div class="score-display">
+                    <p>Skor: <span id="scoreValue">0</span></p>
+                    <p>Benar: <span id="correctValue">0</span></p>
+                    <p>Salah: <span id="wrongValue">0</span></p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Shortcut</h3>
+                <div class="shortcut-info">
+                    <p><span class="shortcut-key">1-4</span>: Pilih jawaban</p>
+                    <p><span class="shortcut-key">M</span>: Buka/tutup menu</p>
+                    <p><span class="shortcut-key">D</span>: Ganti tema</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="overlay" id="overlay"></div>
+
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <button class="theme-toggle" id="themeToggle">🌓</button>
+
+        <div class="main-content" id="mainContent">
+            <div class="header">
+                <h1>Kuis Perkalian</h1>
+            </div>
+
+            <div class="quiz-container">
+                <div class="question-display" id="questionDisplay">?</div>
+
+                <div class="timer-container">
+                    <div class="timer-bar" id="timerBar"></div>
+                </div>
+
+                <div class="options-container" id="optionsContainer">
+                    <button class="option-btn" data-option="1">1</button>
+                    <button class="option-btn" data-option="2">2</button>
+                    <button class="option-btn" data-option="3">3</button>
+                    <button class="option-btn" data-option="4">4</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
