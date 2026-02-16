@@ -1,1 +1,24 @@
-Welcome to Mohpoe CDN site.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar JavaScript</title>
+</head>
+<body>
+    <h1>Belajar JavaScript</h1>
+    <button id="coba">Tes</button>
+    <script>
+        let request = new XMLHttpRequest();
+        let db = 'https://script.google.com/macros/s/AKfycbw3HqNM8x4vUgbz2eS7XiO6cclhobhDQqT2-TNYzog/dev';
+
+        function getAJAX() {
+            request.open('GET', `${db}?action=coba`, false);
+            request.send;
+            console.log(request.responseText);
+        }
+
+        document.getElementById('coba').addEventListener('click', getAJAX);
+    </script>
+</body>
+</html>
