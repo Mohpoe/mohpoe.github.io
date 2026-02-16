@@ -9,11 +9,15 @@
     <h1>Belajar JavaScript</h1>
     <button id="coba">Tes</button>
     <script>
-        let request = new XMLHttpRequest();
-        let db = 'https://script.google.com/macros/s/AKfycbxUVa8Ee5bUbzvks3hia69yfgr2DQ6VmfE-_PBtoIduZhY89rQ_y8nm1lmMTN05LcrI/exec';
+        let url = 'https://script.google.com/macros/s/AKfycbxUVa8Ee5bUbzvks3hia69yfgr2DQ6VmfE-_PBtoIduZhY89rQ_y8nm1lmMTN05LcrI/exec';
 
+        function getAJAX2 () {
+            //
+        }
+        
         function getAJAX() {
-            request.open('GET', `${db}?action=coba`, false);
+            let request = new XMLHttpRequest();
+            request.open('GET', `${url}?action=coba`, false);
             request.send;
             console.log(request.responseText);
         }
