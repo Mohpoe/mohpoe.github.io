@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Belajar JavaScript</title>
 </head>
+
 <body>
     <h1>Belajar JavaScript</h1>
     <button id="coba">Tes</button>
     <script>
         let url = 'https://script.google.com/macros/s/AKfycbxUVa8Ee5bUbzvks3hia69yfgr2DQ6VmfE-_PBtoIduZhY89rQ_y8nm1lmMTN05LcrI/exec';
 
-        function getAJAX2 () {
-            fetch(url, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error('Respon database gak OK!');
-                }
-                return response.json;
-            })
+        function getAJAX2() {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => console.log('Error: ', error));
         }
-        
+
+        // fetch(url, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // }).then(response => {
+        //     if (!response.ok) {
+        //         throw new Error('Respon database gak OK!');
+        //     }
+        //     return response.json;
+        // });
+
         function getAJAX() {
             let request = new XMLHttpRequest();
             request.open('GET', `${url}?action=coba`, false);
@@ -35,4 +44,5 @@
         document.getElementById('coba').addEventListener('click', getAJAX2);
     </script>
 </body>
+
 </html>
