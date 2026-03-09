@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Persamaan Kuadrat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .math-font {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+        .formula-box {
+            background: #f8fafc;
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        .q-input:focus {
+            outline: none;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+        .step-card {
+            border-left: 2px dashed #cbd5e1;
+            padding-left: 1rem;
+            margin-left: 0.5rem;
+        }
+        /* Style untuk tombol +/- agar mudah ditekan di HP */
+        .toggle-btn {
+            background: #e2e8f0;
+            color: #475569;
+            width: 40px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .toggle-btn:active {
+            background: #cbd5e1;
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="bg-red-600 text-white p-6 rounded-t-2xl shadow-lg text-center">
+            <h1 class="text-2xl md:text-3xl font-bold">Persamaan Kuadrat</h1>
+            <p class="mt-2 text-red-100">Memahami Bentuk Umum dan Mencari Akar-akar Persamaan</p>
+        </header>
+
+        <!-- Materi Utama -->
+        <main class="bg-white p-6 shadow-md border-x">
+            
+            <section class="mb-10">
+                <h2 class="text-xl font-bold text-red-800 border-b-2 border-red-100 pb-2 mb-4">1. Bentuk Umum</h2>
+                <p class="text-gray-700 leading-relaxed mb-4">
+                    Persamaan kuadrat adalah persamaan polonimial derajat dua. Bentuk umumnya adalah:
+                </p>
+                <div class="text-center py-4">
+                    <div class="inline-block bg-red-50 px-8 py-4 rounded-xl border border-red-200">
+                        <span class="text-2xl font-bold text-red-700 math-font">ax² + bx + c = 0</span>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-600 mt-2 italic text-center">
+                    Dengan syarat: a tidak boleh sama dengan 0.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-xl font-bold text-red-800 border-b-2 border-red-100 pb-2 mb-4">2. Cara Faktorisasi</h2>
+                <p class="text-gray-700 mb-4">
+                    Salah satu cara mencari akar (nilai x) adalah dengan faktorisasi. Jika <strong>a = 1</strong>, kita mencari dua angka yang:
+                </p>
+                <ul class="list-disc ml-6 space-y-2 text-gray-700">
+                    <li>Jika <strong>dijumlahkan</strong> hasilnya adalah <strong>b</strong></li>
+                    <li>Jika <strong>dikali</strong> hasilnya adalah <strong>c</strong></li>
+                </ul>
+                <div class="formula-box">
+                    <p class="font-bold text-gray-800">Rumus Faktorisasi:</p>
+                    <p class="text-lg text-red-700 math-font">(x + p)(x + q) = 0</p>
+                    <p class="text-sm text-gray-500">Maka x = -p atau x = -q</p>
+                </div>
+            </section>
+
+            <!-- Contoh Soal -->
+            <section class="mb-10">
+                <h2 class="text-xl font-bold text-green-700 border-b-2 border-green-100 pb-2 mb-4">3. Contoh Soal</h2>
+                
+                <div class="bg-green-50 p-5 rounded-lg border border-green-200 mb-6">
+                    <p class="font-bold text-green-800 mb-2">Selesaikan: x² + 5x + 6 = 0</p>
+                    <div class="step-card space-y-2 text-sm text-gray-700">
+                        <p>1. Cari angka yang jika dikali = 6, dan dijumlah = 5.</p>
+                        <p>2. Angka tersebut adalah <strong>2</strong> dan <strong>3</strong> (karena 2×3=6 dan 2+3=5).</p>
+                        <p>3. Bentuk faktor: <strong>(x + 2)(x + 3) = 0</strong></p>
+                        <p>4. Akar-akar: x + 2 = 0 → <strong>x = -2</strong> atau x + 3 = 0 → <strong>x = -3</strong></p>
+                        <p class="mt-2 font-bold text-green-700 underline">Himpunan Penyelesaian: {-3, -2}</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Latihan Soal -->
+            <section id="latihan">
+                <h2 class="text-xl font-bold text-orange-700 border-b-2 border-orange-100 pb-2 mb-6">4. Latihan Mandiri (15 Soal)</h2>
+                <p class="text-sm text-gray-500 mb-4 italic leading-relaxed">
+                    *Petunjuk: Ketik angka saja, lalu tekan tombol <strong>+/-</strong> untuk mengubah tanda negatif.
+                </p>
+                
+                <div class="space-y-8" id="quiz-container">
+                    <!-- Soal-soal akan di-render menggunakan JS untuk manajemen data yang lebih baik -->
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-slate-800 text-slate-400 text-center p-4 rounded-b-2xl text-sm">
+            &copy; 2024 Pembelajaran Matematika Interaktif - Persamaan Kuadrat
+        </footer>
+    </div>
+
+    <script>
+        const questions = [
+            { q: "x² + 3x + 2 = 0", x1: -2, x2: -1 },
+            { q: "x² - 5x + 6 = 0", x1: 2, x2: 3 },
+            { q: "x² + 7x + 12 = 0", x1: -4, x2: -3 },
+            { q: "x² - 5x + 4 = 0", x1: 1, x2: 4 },
+            { q: "x² + 3x - 10 = 0", x1: -5, x2: 2 },
+            { q: "x² - 4 = 0", x1: -2, x2: 2 },
+            { q: "x² - 5x = 0", x1: 0, x2: 5 },
+            { q: "x² + 10x + 25 = 0", x1: -5, x2: -5 },
+            { q: "x² - 5x - 6 = 0", x1: -1, x2: 6 },
+            { q: "x² - 9 = 0", x1: -3, x2: 3 },
+            { q: "x² - 6x + 8 = 0", x1: 2, x2: 4 },
+            { q: "x² + 5x - 6 = 0", x1: -6, x2: 1 },
+            { q: "x² + 6x - 16 = 0", x1: -8, x2: 2 },
+            { q: "x² - 10x + 21 = 0", x1: 3, x2: 7 },
+            { q: "x² + 9x - 52 = 0", x1: 4, x2: -13 }
+        ];
+
+        function renderQuestions() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = questions.map((item, index) => `
+                <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-x1="${item.x1}" data-x2="${item.x2}">
+                    <p class="font-medium text-gray-800 mb-4">${index + 1}. ${item.q}</p>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-500">x₁ =</span>
+                            <div class="flex border-2 rounded-lg overflow-hidden bg-white focus-within:border-red-500 transition-all">
+                                <input type="number" class="p-2 w-16 text-center outline-none q-x1" placeholder="0">
+                                <button onclick="toggleSign(this)" class="toggle-btn border-l">+/-</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-500">x₂ =</span>
+                            <div class="flex border-2 rounded-lg overflow-hidden bg-white focus-within:border-red-500 transition-all">
+                                <input type="number" class="p-2 w-16 text-center outline-none q-x2" placeholder="0">
+                                <button onclick="toggleSign(this)" class="toggle-btn border-l">+/-</button>
+                            </div>
+                        </div>
+                        <button onclick="checkRoots(this)" class="bg-red-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-red-700 active:scale-95 transition-all shadow-md mt-2 sm:mt-0">Cek</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Fungsi untuk mengubah tanda positif/negatif
+        function toggleSign(btn) {
+            const input = btn.previousElementSibling;
+            if (input.value === "" || input.value === "0") {
+                // Jika kosong atau nol, beri tanda negatif saja jika user ingin memulai dengan negatif
+                input.value = "-";
+                return;
+            }
+            
+            // Logika swap tanda
+            if (input.value.startsWith("-")) {
+                input.value = input.value.substring(1);
+            } else {
+                input.value = "-" + input.value;
+            }
+            
+            // Triger event input agar UI terupdate jika perlu
+            input.dispatchEvent(new Event('input'));
+        }
+
+        function checkRoots(btn) {
+            const container = btn.closest('.quiz-item');
+            const inX1 = container.querySelector('.q-x1');
+            const inX2 = container.querySelector('.q-x2');
+            
+            const targetX1 = parseFloat(container.getAttribute('data-x1'));
+            const targetX2 = parseFloat(container.getAttribute('data-x2'));
+            
+            const val1 = parseFloat(inX1.value);
+            const val2 = parseFloat(inX2.value);
+
+            if (isNaN(val1) || isNaN(val2)) return;
+
+            const isCorrect = (val1 === targetX1 && val2 === targetX2) || 
+                              (val1 === targetX2 && val2 === targetX1);
+
+            if (isCorrect) {
+                container.querySelectorAll('.flex.border-2').forEach(el => {
+                    el.classList.remove('border-red-500');
+                    el.classList.add('border-green-500', 'bg-green-50');
+                });
+                btn.innerText = "Benar! 🎉";
+                btn.classList.replace('bg-red-600', 'bg-green-600');
+                btn.classList.remove('bg-amber-600');
+            } else {
+                container.querySelectorAll('.flex.border-2').forEach(el => {
+                    el.classList.add('border-red-500', 'bg-red-50');
+                });
+                btn.innerText = "Salah ❌";
+                btn.classList.replace('bg-red-600', 'bg-amber-600');
+                setTimeout(() => {
+                    btn.innerText = "Cek";
+                    btn.classList.replace('bg-amber-600', 'bg-red-600');
+                }, 1000);
+            }
+        }
+
+        // Jalankan render saat halaman dimuat
+        renderQuestions();
+    </script>
+</body>
+</html>
