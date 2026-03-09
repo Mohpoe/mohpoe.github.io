@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trigonometri - Lingkaran Satuan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .circle-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            border: 2px solid #1e40af;
+            border-radius: 50%;
+            margin: 20px auto;
+            background: white;
+        }
+        .axis {
+            position: absolute;
+            background: #cbd5e1;
+        }
+        .axis-x { width: 100%; height: 1px; top: 50%; left: 0; }
+        .axis-y { width: 1px; height: 100%; top: 0; left: 50%; }
+        
+        .point-p {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #ef4444;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        
+        .math-highlight {
+            color: #1e40af;
+            font-weight: 800;
+            background: #eff6ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .formula-card {
+            background: #f8fafc;
+            border-left: 4px solid #1e40af;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .q-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8 font-sans">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="bg-indigo-700 text-white p-6 rounded-t-2xl shadow-lg text-center">
+            <h1 class="text-2xl md:text-3xl font-bold">Fungsi Trigonometri & Lingkaran Satuan</h1>
+            <p class="mt-2 text-indigo-100">Memahami Sinus, Kosinus, dan Tangen melalui Koordinat</p>
+        </header>
+
+        <!-- Materi Utama -->
+        <main class="bg-white p-6 shadow-md border-x">
+            
+            <section class="mb-10">
+                <h2 class="text-xl font-bold text-indigo-800 border-b-2 border-indigo-100 pb-2 mb-4">1. Apa itu Lingkaran Satuan?</h2>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    Lingkaran satuan adalah lingkaran yang berpusat di titik <strong>O(0, 0)</strong> dan memiliki jari-jari <strong>r = 1</strong>. 
+                    Setiap titik <strong>P(x, y)</strong> pada lingkaran ini mewakili nilai trigonometri dari sudut <strong>theta</strong> yang terbentuk:
+                </p>
+
+                <!-- Ilustrasi Sederhana -->
+                <div class="text-center mb-6">
+                    <div class="circle-container">
+                        <div class="axis axis-x"></div>
+                        <div class="axis axis-y"></div>
+                        <div style="position:absolute; width:106px; height:2px; background:#1e40af; top:50%; left:50%; transform: rotate(-45deg); transform-origin: left;"></div>
+                        <div class="point-p" style="top:32%; left:65%;"></div>
+                        <span style="position:absolute; top:25%; left:68%; font-weight:bold; color:#ef4444;">P(x, y)</span>
+                        <span style="position:absolute; top:45%; left:52%; font-size:12px;">theta</span>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="formula-card text-center">
+                        <span class="block text-gray-600 text-sm">Kosinus (x)</span>
+                        <span class="formula-text text-xl text-blue-700 font-bold">cos(theta) = x</span>
+                    </div>
+                    <div class="formula-card text-center">
+                        <span class="block text-gray-600 text-sm">Sinus (y)</span>
+                        <span class="formula-text text-xl text-blue-700 font-bold">sin(theta) = y</span>
+                    </div>
+                    <div class="formula-card text-center">
+                        <span class="block text-gray-600 text-sm">Tangen (y/x)</span>
+                        <span class="formula-text text-xl text-blue-700 font-bold">tan(theta) = y / x</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Latihan Soal -->
+            <section>
+                <h2 class="text-xl font-bold text-orange-700 border-b-2 border-orange-100 pb-2 mb-6">Latihan Interaktif (15 Soal)</h2>
+                
+                <div class="space-y-6">
+                    <!-- Soal 1 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="0.5">
+                        <p class="font-medium text-gray-800 mb-3">1. Jika titik P pada lingkaran satuan berada di (0.866, 0.5), berapakah nilai <strong>sin(theta)</strong>?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" step="0.1" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="-1">
+                        <p class="font-medium text-gray-800 mb-3">2. Berapakah nilai <strong>cos(theta)</strong> jika titik P berada pada koordinat (-1, 0)?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 3 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="1">
+                        <p class="font-medium text-gray-800 mb-3">3. Jika koordinat P adalah (0.7, 0.7), berapakah nilai <strong>tan(theta)</strong>? (Bulatkan ke angka bulat)</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 4 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="0">
+                        <p class="font-medium text-gray-800 mb-3">4. Pada sudut 90 derajat (titik 0, 1), berapakah nilai <strong>cos(90)</strong>?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 5 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="-0.8">
+                        <p class="font-medium text-gray-800 mb-3">5. Titik P memiliki koordinat (-0.6, -0.8). Berapakah nilai <strong>sin(theta)</strong>?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" step="0.1" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 6 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="0.5">
+                        <p class="font-medium text-gray-800 mb-3">6. Jika <strong>cos(theta) = 0.5</strong>, berapakah nilai koordinat <strong>x</strong> titik tersebut?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" step="0.1" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 7 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="0">
+                        <p class="font-medium text-gray-800 mb-3">7. Berapakah nilai <strong>tan(theta)</strong> jika titik P berada pada koordinat (1, 0)?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 8 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="-1">
+                        <p class="font-medium text-gray-800 mb-3">8. Pada sudut 270 derajat, koordinat titik P adalah (0, -1). Berapakah nilai <strong>sin(270)</strong>?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 9 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="0.6">
+                        <p class="font-medium text-gray-800 mb-3">9. Jika P = (0.6, -0.8), berapakah nilai <strong>cos(theta)</strong>?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" step="0.1" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 10 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="-1">
+                        <p class="font-medium text-gray-800 mb-3">10. Jika koordinat P adalah (-0.5, 0.5), berapakah nilai <strong>tan(theta)</strong>?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 11 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="1">
+                        <p class="font-medium text-gray-800 mb-3">11. Berapakah nilai <strong>sin(90)</strong> pada lingkaran satuan?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 12 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="0">
+                        <p class="font-medium text-gray-800 mb-3">12. Berapakah nilai <strong>sin(180)</strong> pada lingkaran satuan?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 13 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="-0.5">
+                        <p class="font-medium text-gray-800 mb-3">13. Titik P berada di kuadran II dengan koordinat (-0.5, 0.866). Berapakah nilai <strong>cos(theta)</strong>?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" step="0.1" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 14 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="1">
+                        <p class="font-medium text-gray-800 mb-3">14. Jika <strong>sin(theta) = 1</strong>, berapakah nilai koordinat <strong>y</strong> titik tersebut?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+
+                    <!-- Soal 15 -->
+                    <div class="quiz-item p-5 bg-slate-50 rounded-xl border border-slate-200" data-answer="2">
+                        <p class="font-medium text-gray-800 mb-3">15. Jika tan(theta) = y/x, berapakah nilai tan jika koordinat P adalah (0.4, 0.8)?</p>
+                        <div class="flex items-center gap-3">
+                            <input type="number" class="border-2 p-2 w-28 text-center rounded-lg q-input" placeholder="Jawaban">
+                            <button onclick="checkAnswer(this)" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-all">Cek</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-slate-800 text-slate-400 text-center p-4 rounded-b-2xl text-sm">
+            &copy; 2024 Pembelajaran Trigonometri Interaktif - Lingkaran Satuan
+        </footer>
+    </div>
+
+    <script>
+        function checkAnswer(btn) {
+            const container = btn.closest('.quiz-item');
+            const input = container.querySelector('.q-input');
+            const correctAnswer = parseFloat(container.getAttribute('data-answer'));
+            const userValue = parseFloat(input.value);
+
+            if (!isNaN(userValue) && Math.abs(userValue - correctAnswer) < 0.01) {
+                input.classList.remove('border-red-500', 'bg-red-50');
+                input.classList.add('border-green-500', 'bg-green-50');
+                btn.innerText = "Benar! 🎉";
+                btn.classList.remove('bg-indigo-600', 'bg-red-600');
+                btn.classList.add('bg-green-600');
+            } else {
+                input.classList.remove('border-green-500', 'bg-green-50');
+                input.classList.add('border-red-500', 'bg-red-50');
+                btn.innerText = "Salah ❌";
+                btn.classList.remove('bg-indigo-600', 'bg-green-600');
+                btn.classList.add('bg-red-600');
+                setTimeout(() => {
+                    btn.innerText = "Cek";
+                    btn.classList.remove('bg-red-600');
+                    btn.classList.add('bg-indigo-600');
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
