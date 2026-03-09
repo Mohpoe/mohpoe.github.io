@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eksplorasi Fungsi Trigonometri Periodik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            scroll-behavior: smooth;
+        }
+
+        .math-display {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #4f46e5;
+        }
+
+        canvas { 
+            background-color: #ffffff; 
+            border-radius: 1.5rem; 
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .custom-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+        }
+
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4f46e5;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .card-glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .soal-card {
+            transition: all 0.3s ease;
+        }
+
+        .soal-card:hover {
+            border-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 p-4 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 p-2 rounded-xl text-white">
+                    <i class="fas fa-wave-square text-xl"></i>
+                </div>
+                <span class="font-bold text-xl tracking-tight text-slate-800">Trigo<span class="text-indigo-600">Lab</span> XI</span>
+            </div>
+            <div class="hidden md:flex space-x-6 text-sm font-semibold text-slate-500">
+                <a href="#materi" class="hover:text-indigo-600 transition">Materi</a>
+                <a href="#visualisasi" class="hover:text-indigo-600 transition">Visualisasi</a>
+                <a href="#contoh" class="hover:text-indigo-600 transition">Contoh Soal</a>
+                <a href="#latihan" class="hover:text-indigo-600 transition">Latihan (10 Soal)</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 space-y-12">
+        
+        <!-- Section Materi -->
+        <section id="materi" class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <h1 class="text-4xl font-extrabold text-slate-900 mb-4">Fungsi Trigonometri sebagai Fungsi Periodik</h1>
+                <p class="text-slate-500">Memahami bagaimana gerakan melingkar membentuk pola gelombang yang berulang secara matematis.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 card-glass">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
+                            <i class="fas fa-redo-alt"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Definisi Periodisitas</h2>
+                    </div>
+                    <p class="text-slate-600 leading-relaxed">
+                        Sebuah fungsi $f$ dikatakan **periodik** jika terdapat bilangan riil positif $P$ sedemikian sehingga:
+                    </p>
+                    <div class="math-display">
+                        $$f(x + P) = f(x)$$
+                    </div>
+                    <p class="text-sm text-slate-500 mt-2">
+                        Nilai terkecil dari $P$ disebut sebagai **periode dasar**. Untuk fungsi dasar $\sin(x)$ dan $\cos(x)$, periodenya adalah $360^\circ$ atau $2\pi$ radian.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 card-glass">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-emerald-100 text-emerald-600 p-2 rounded-lg">
+                            <i class="fas fa-arrows-alt-v"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Amplitudo & Parameter</h2>
+                    </div>
+                    <p class="text-slate-600 mb-4">Permodelan fungsi: $y = A \sin(B(x - \alpha)) + D$</p>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <span class="font-bold text-emerald-600 mr-2">1.</span>
+                            <span>**Amplitudo ($A$):** Setengah jarak dari nilai maksimum ke minimum: $|A|$.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="font-bold text-emerald-600 mr-2">2.</span>
+                            <span>**Periode ($P$):** Jarak satu gelombang penuh: $P = \frac{360^\circ}{B}$.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Visualisasi -->
+        <section id="visualisasi" class="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800">Laboratorium Visual</h2>
+                    <p class="text-sm text-slate-500">Geser slider untuk melihat pembentukan grafik sinus.</p>
+                </div>
+                <button onclick="resetTrace()" class="flex items-center space-x-2 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl transition text-sm font-semibold">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>Reset Grafik</span>
+                </button>
+            </div>
+
+            <div class="relative">
+                <canvas id="trigoCanvas" class="w-full h-[350px]"></canvas>
+            </div>
+
+            <div class="mt-10 max-w-3xl mx-auto space-y-6">
+                <div class="flex justify-between items-end mb-2">
+                    <div class="space-y-1">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Input Sudut ($\theta$)</span>
+                        <div id="angleDisplay" class="text-3xl font-bold text-indigo-600">0°</div>
+                    </div>
+                    <div class="text-right space-y-1">
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Nilai $y = \sin(\theta)$</span>
+                        <div id="sinDisplay" class="text-2xl font-mono font-bold text-blue-500">0.00</div>
+                    </div>
+                </div>
+                <input type="range" id="angleSlider" min="0" max="720" value="0" class="custom-slider">
+                <div class="flex justify-between text-xs font-bold text-slate-400">
+                    <span>$0^\circ$</span>
+                    <span>$360^\circ$</span>
+                    <span>$720^\circ$</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Contoh Soal (BARU) -->
+        <section id="contoh" class="space-y-6">
+            <h2 class="text-3xl font-bold text-slate-800 text-center mb-8">Contoh Analisis Terbimbing</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Contoh 1 -->
+                <div class="bg-slate-900 text-white p-8 rounded-[2rem] shadow-xl">
+                    <div class="flex items-center space-x-2 text-indigo-400 mb-4 font-black tracking-tighter uppercase text-sm">
+                        <i class="fas fa-bookmark"></i> <span>Contoh Soal 1</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Analisis Fungsi $y = 3 \sin(2x)$</h3>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-300">
+                        <div class="border-l-2 border-indigo-500 pl-4">
+                            <p class="font-bold text-white mb-1">A. Amplitudo ($A$)</p>
+                            <p>Koefisien di depan fungsi adalah $3$. Maka, $|A| = 3$. Grafik akan mencapai puncak di $y=3$ dan lembah di $y=-3$.</p>
+                        </div>
+                        <div class="border-l-2 border-indigo-500 pl-4">
+                            <p class="font-bold text-white mb-1">B. Periode ($P$)</p>
+                            <p>Koefisien $B = 2$. Maka periode $P = \frac{360^\circ}{2} = 180^\circ$. Satu gelombang selesai dalam $180^\circ$.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contoh 2 -->
+                <div class="bg-white p-8 rounded-[2rem] border border-slate-200 shadow-sm">
+                    <div class="flex items-center space-x-2 text-emerald-600 mb-4 font-black tracking-tighter uppercase text-sm">
+                        <i class="fas fa-star"></i> <span>Contoh Soal 2</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Analisis Fungsi $y = 2 \cos(x) + 4$</h3>
+                    <div class="space-y-4 text-sm leading-relaxed text-slate-600">
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <p class="font-bold text-slate-800 mb-1">1. Titik Kesetimbangan ($D$)</p>
+                            <p>Konstanta $+4$ menggeser seluruh grafik ke atas sejauh 4 satuan. Garis tengahnya adalah $y = 4$.</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <p class="font-bold text-slate-800 mb-1">2. Nilai Maksimum & Minimum</p>
+                            <p>Maksimum: $D + |A| = 4 + 2 = 6$</p>
+                            <p>Minimum: $D - |A| = 4 - 2 = 2$</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10 Latihan Soal -->
+        <section id="latihan" class="space-y-8 pb-24">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-800">Uji Kompetensi Mandiri</h2>
+                <p class="text-slate-500 mt-2">Selesaikan 10 tantangan berikut untuk mengasah kemampuanmu.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="soal-container">
+                <!-- Soal diinjeksi via JS -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Data Soal Latihan
+        const bankSoal = [
+            { id: 1, q: "Berapakah periode dasar dari fungsi $f(x) = \\sin(x)$?", opt: ["90°", "180°", "360°"], ans: 2 },
+            { id: 2, q: "Berapakah amplitudo dari fungsi $y = 7 \\cos(4x)$?", opt: ["4", "7", "28"], ans: 1 },
+            { id: 3, q: "Fungsi $y = \\sin(3x)$ memiliki periode sebesar...", opt: ["120°", "360°", "1080°"], ans: 0 },
+            { id: 4, q: "Berapakah nilai maksimum dari fungsi $y = 4 \\sin(x) + 5$?", opt: ["4", "5", "9"], ans: 2 },
+            { id: 5, q: "Jika $y = -2 \\cos(x)$, berapakah amplitudonya?", opt: ["-2", "2", "0"], ans: 1 },
+            { id: 6, q: "Fungsi $y = \\cos(x) - 10$ memiliki nilai minimum di...", opt: ["-9", "-10", "-11"], ans: 2 },
+            { id: 7, q: "Berapakah nilai $B$ jika periode fungsi sinus adalah $90^\circ$?", opt: ["2", "4", "8"], ans: 1 },
+            { id: 8, q: "Fungsi $y = 2 \\sin(2x)$ memiliki berapa gelombang penuh dalam rentang $360^\circ$?", opt: ["1", "2", "4"], ans: 1 },
+            { id: 9, q: "Garis tengah (kesetimbangan) dari fungsi $y = \\sin(x) + 3$ adalah...", opt: ["y = 0", "y = 1", "y = 3"], ans: 2 },
+            { id: 10, q: "Nilai minimum dari $y = 3 \\sin(2x) - 2$ adalah...", opt: ["-5", "-2", "-1"], ans: 0 }
+        ];
+
+        function renderSoal() {
+            const container = document.getElementById('soal-container');
+            bankSoal.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-6 rounded-2xl border border-slate-200 shadow-sm soal-card";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-black text-indigo-500 uppercase tracking-widest">Tantangan #${item.id}</span>
+                        <div id="status-${item.id}" class="text-xs font-bold"></div>
+                    </div>
+                    <p class="font-semibold text-slate-800 mb-6">${item.q}</p>
+                    <div class="space-y-3">
+                        ${item.opt.map((o, i) => `
+                            <button onclick="checkCorrect(${item.id}, ${i}, ${item.ans}, this)" 
+                                    class="w-full text-left p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition text-sm flex justify-between items-center group">
+                                <span>${o}</span>
+                                <i class="fas fa-chevron-right text-slate-300 group-hover:text-indigo-400 transition"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function checkCorrect(soalId, choiceIdx, correctIdx, btn) {
+            const buttons = btn.parentElement.querySelectorAll('button');
+            const statusDiv = document.getElementById(`status-${soalId}`);
+            buttons.forEach(b => b.disabled = true);
+
+            if (choiceIdx === correctIdx) {
+                btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-700');
+                statusDiv.innerHTML = `<span class="text-emerald-500"><i class="fas fa-check-circle"></i> BENAR</span>`;
+            } else {
+                btn.classList.add('bg-red-50', 'border-red-500', 'text-red-700');
+                buttons[correctIdx].classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-600');
+                statusDiv.innerHTML = `<span class="text-red-500"><i class="fas fa-times-circle"></i> SALAH</span>`;
+            }
+        }
+
+        // --- Canvas Logic ---
+        const canvas = document.getElementById('trigoCanvas');
+        const ctx = canvas.getContext('2d');
+        const slider = document.getElementById('angleSlider');
+        const angleDisplay = document.getElementById('angleDisplay');
+        const sinDisplay = document.getElementById('sinDisplay');
+
+        let points = [];
+        let angle = 0;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 350;
+            draw();
+        }
+
+        function resetTrace() {
+            points = [];
+            draw();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const centerY = canvas.height / 2;
+            const radius = 80;
+            const circleCenterX = 150;
+            const graphStartX = 320;
+            const pixelsPerDegree = (canvas.width - graphStartX - 50) / 720;
+
+            // X-Axis
+            ctx.strokeStyle = '#f1f5f9';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(graphStartX, centerY);
+            ctx.lineTo(canvas.width - 20, centerY);
+            ctx.stroke();
+
+            // Circle
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.beginPath();
+            ctx.arc(circleCenterX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            const rad = (angle * Math.PI) / 180;
+            const px = circleCenterX + radius * Math.cos(rad);
+            const py = centerY - radius * Math.sin(rad);
+
+            // Radius Line
+            ctx.strokeStyle = '#4f46e5';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(circleCenterX, centerY);
+            ctx.lineTo(px, py);
+            ctx.stroke();
+
+            // Active Point
+            ctx.fillStyle = '#4f46e5';
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (!points.some(p => p.angle === angle)) {
+                points.push({ angle: angle, y: py });
+                points.sort((a, b) => a.angle - b.angle);
+            }
+
+            // Projection Line
+            ctx.setLineDash([5, 5]);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.beginPath();
+            ctx.moveTo(px, py);
+            ctx.lineTo(graphStartX + angle * pixelsPerDegree, py);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Main Wave
+            if (points.length > 0) {
+                ctx.strokeStyle = '#3b82f6';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                points.forEach((p, idx) => {
+                    const gx = graphStartX + p.angle * pixelsPerDegree;
+                    if (idx === 0) ctx.moveTo(gx, p.y);
+                    else ctx.lineTo(gx, p.y);
+                });
+                ctx.stroke();
+            }
+
+            sinDisplay.innerText = Math.sin(rad).toFixed(2);
+        }
+
+        slider.addEventListener('input', (e) => {
+            angle = parseInt(e.target.value);
+            angleDisplay.innerText = `${angle}°`;
+            draw();
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+        window.onload = () => {
+            resizeCanvas();
+            renderSoal();
+            MathJax.typeset();
+        };
+    </script>
+</body>
+</html>
