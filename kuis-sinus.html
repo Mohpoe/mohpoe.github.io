@@ -1,0 +1,331 @@
+<html>
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Sinus: Progresif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #818cf8;
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+        }
+
+        #chartContainer {
+            height: 230px;
+        }
+
+        .symbol-btn {
+            background: rgba(129, 140, 248, 0.15);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #c7d2fe;
+        }
+
+        .symbol-btn:hover {
+            background: rgba(129, 140, 248, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .badge-easy {
+            background: #10b981;
+            color: white;
+        }
+
+        .badge-medium {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .badge-hard {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div id="app" class="w-full max-w-2xl glass-card p-6 md:p-10">
+        <!-- Start Screen -->
+        <div id="start-screen" class="text-center">
+            <h1
+                class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-indigo-400 to-rose-400 mb-4">
+                Sinus Master: Progresif</h1>
+            <p class="text-slate-400 mb-8 text-lg leading-relaxed">Mulai dari konsep dasar untuk memperkuat analisis
+                soal yang lebih sulit. Selesaikan 50 tantangan bertahap.</p>
+            <button onclick="startQuiz()"
+                class="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold text-xl transition-all shadow-xl shadow-indigo-500/20">
+                Mulai Latihan
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <span class="text-indigo-400 font-bold" id="question-count">Soal 1/50</span>
+                    <div id="difficulty-badge"
+                        class="mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-block">
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-2xl font-bold text-white" id="score-display">0</div>
+                    <div class="text-[10px] text-slate-500 uppercase">Poin Akumulasi</div>
+                </div>
+            </div>
+
+            <div id="chartContainer" class="mb-6 bg-slate-900/80 rounded-2xl p-3 border border-slate-700">
+                <canvas id="trigChart"></canvas>
+            </div>
+
+            <div class="mb-8">
+                <p id="question-text" class="text-lg font-medium leading-relaxed mb-5 text-slate-200"></p>
+
+                <div class="flex flex-wrap gap-2 mb-4 items-center">
+                    <button class="symbol-btn" onclick="insertSymbol('√')">√</button>
+                    <button class="symbol-btn" onclick="insertSymbol('1/2√2')">½√2</button>
+                    <button class="symbol-btn" onclick="insertSymbol('1/2√3')">½√3</button>
+                    <button class="symbol-btn" onclick="insertSymbol('π')">π</button>
+                </div>
+
+                <div class="relative group">
+                    <input type="text" id="answer-input" autocomplete="off"
+                        class="w-full bg-slate-800/50 border-2 border-slate-700 rounded-xl py-4 px-6 text-xl text-white transition-all placeholder:text-slate-600"
+                        placeholder="Ketik jawaban Anda...">
+                </div>
+            </div>
+
+            <div id="feedback" class="mb-6 p-4 rounded-xl hidden text-center font-bold text-lg"></div>
+
+            <button id="submit-btn" onclick="checkAnswer()"
+                class="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-bold text-lg transition-all shadow-lg">
+                Cek Analisis
+            </button>
+            <button id="next-btn" onclick="nextQuestion()"
+                class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-lg hidden transition-all shadow-lg">
+                Soal Berikutnya
+            </button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden text-center">
+            <h2 class="text-4xl font-bold mb-4 text-white">Sesi Selesai</h2>
+            <div class="bg-slate-800/50 p-10 rounded-3xl mb-8 border border-slate-700">
+                <div class="text-8xl font-black text-indigo-500 mb-2" id="final-score">0</div>
+                <p class="text-slate-400 text-lg" id="final-msg"></p>
+            </div>
+            <button onclick="location.reload()"
+                class="w-full py-4 border-2 border-indigo-500 text-indigo-500 rounded-xl font-bold hover:bg-indigo-500 hover:text-white transition-all">
+                Ulangi Latihan
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let questionNumber = 0;
+        const totalQuestions = 50;
+        let chartInstance = null;
+        let correctAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            generateQuestion();
+        }
+
+        function insertSymbol(sym) {
+            const input = document.getElementById('answer-input');
+            const start = input.selectionStart;
+            input.value = input.value.substring(0, start) + sym + input.value.substring(input.selectionEnd);
+            input.focus();
+            input.setSelectionRange(start + sym.length, start + sym.length);
+        }
+
+        function generateQuestion() {
+            questionNumber++;
+            if (questionNumber > totalQuestions) return showResults();
+
+            document.getElementById('question-count').innerText = `Soal ${questionNumber}/${totalQuestions}`;
+            document.getElementById('answer-input').value = "";
+            document.getElementById('answer-input').disabled = false;
+            document.getElementById('submit-btn').classList.remove('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('feedback').classList.add('hidden');
+
+            const badge = document.getElementById('difficulty-badge');
+
+            // Logika Penentuan Level: Progresif
+            // Di awal kuis lebih banyak soal mudah, semakin tinggi soalnya semakin sulit
+            let difficultySeed = Math.random() + (questionNumber / totalQuestions);
+            let q = { A: 1, k: 1, B: 0, C: 0, text: "", correct: [] };
+
+            if (difficultySeed < 0.6) { // LEVEL DASAR (Frequent di awal)
+                badge.innerText = "Level: Dasar";
+                badge.className = "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-block badge-easy";
+
+                const type = Math.floor(Math.random() * 4);
+                if (type === 0) {
+                    const amp = Math.floor(Math.random() * 4) + 2;
+                    q.A = amp;
+                    q.text = `Berapakah nilai <b>Amplitudo</b> dari fungsi f(x) = ${amp} sin(x)?`;
+                    q.correct = [amp.toString()];
+                } else if (type === 1) {
+                    const angles = [0, 30, 90, 180, 270];
+                    const angle = angles[Math.floor(Math.random() * angles.length)];
+                    q.text = `Berapakah nilai <b>sin(${angle}°)</b>?`;
+                    q.correct = getSinValueVariants(angle);
+                } else if (type === 2) {
+                    q.text = "Berapakah periode standar (satu gelombang penuh) dari f(x) = sin(x) dalam derajat?";
+                    q.correct = ["360"];
+                } else {
+                    const shiftY = Math.floor(Math.random() * 3) + 1;
+                    q.C = shiftY;
+                    q.text = `Fungsi f(x) = sin(x) + ${shiftY} memindahkan seluruh grafik sejauh ${shiftY} satuan ke arah...? (Isi: Atas / Bawah)`;
+                    q.correct = ["Atas"];
+                }
+            }
+            else if (difficultySeed < 1.2) { // LEVEL MENENGAH
+                badge.innerText = "Level: Menengah";
+                badge.className = "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-block badge-medium";
+
+                const type = Math.floor(Math.random() * 2);
+                if (type === 0) {
+                    q.k = [2, 3, 4][Math.floor(Math.random() * 3)];
+                    q.text = `Jika f(x) = sin(${q.k}x), berapakah <b>Periode</b> fungsi tersebut (dalam derajat)?`;
+                    q.correct = [(360 / q.k).toString()];
+                } else {
+                    const shiftY = Math.floor(Math.random() * 3) + 2;
+                    q.C = -shiftY;
+                    q.text = `Berapakah <b>nilai minimum</b> dari fungsi f(x) = sin(x) - ${shiftY}?`;
+                    q.correct = [(-1 - shiftY).toString()];
+                }
+            }
+            else { // LEVEL PAKAR (Frequent di akhir)
+                badge.innerText = "Level: Pakar";
+                badge.className = "mt-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-block badge-hard";
+
+                const type = Math.floor(Math.random() * 2);
+                if (type === 0) {
+                    const shiftX = [30, 45, 60, 90][Math.floor(Math.random() * 4)];
+                    const isRight = Math.random() > 0.5;
+                    q.B = isRight ? -shiftX : shiftX;
+                    q.text = `Grafik f(x) = sin(x ${isRight ? '-' : '+'} ${shiftX}°) bergeser sejauh ${shiftX}° ke arah...? (Ketik: Kanan / Kiri)`;
+                    q.correct = [isRight ? "Kanan" : "Kiri"];
+                } else {
+                    const shiftX = [30, 60, 90][Math.floor(Math.random() * 3)];
+                    q.B = -shiftX; // Geser kanan
+                    q.text = `Titik puncak sin(x) adalah 90°. Tentukan x puncak pertama untuk f(x) = sin(x - ${shiftX}°).`;
+                    q.correct = [(90 + shiftX).toString()];
+                }
+            }
+
+            correctAnswers = q.correct.map(v => normalizeAnswer(v));
+            document.getElementById('question-text').innerHTML = q.text;
+            updateChart(q);
+            document.getElementById('answer-input').focus();
+        }
+
+        function normalizeAnswer(str) {
+            return str.toLowerCase().trim().replace(/\s+/g, '').replace(/akar/g, '√').replace(/½/g, '1/2').replace(/°/g, '');
+        }
+
+        function getSinValueVariants(deg) {
+            let n = ((deg % 360) + 360) % 360;
+            const map = { 0: ["0"], 30: ["1/2", "0.5"], 90: ["1"], 180: ["0"], 270: ["-1"] };
+            return map[n] || ["?"];
+        }
+
+        function checkAnswer() {
+            const input = document.getElementById('answer-input').value;
+            if (!input) return;
+            const normInput = normalizeAnswer(input);
+            const isCorrect = correctAnswers.some(ans => normInput === ans || normInput === ans.replace('1/2', '0.5'));
+
+            const fb = document.getElementById('feedback');
+            document.getElementById('answer-input').disabled = true;
+            document.getElementById('submit-btn').classList.add('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                currentScore += 20;
+                fb.innerText = "TEPAT! +20 Poin";
+                fb.className = "mb-6 p-4 rounded-xl text-center font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+            } else {
+                fb.innerHTML = `KURANG TEPAT. Jawaban: <span class="text-white">${correctAnswers[0].toUpperCase()}</span>`;
+                fb.className = "mb-6 p-4 rounded-xl text-center font-bold bg-rose-500/10 text-rose-400 border border-rose-500/30";
+            }
+            document.getElementById('score-display').innerText = currentScore;
+        }
+
+        function nextQuestion() { generateQuestion(); }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = currentScore;
+            document.getElementById('final-msg').innerText = "Kuis Progresif Selesai. Fondasi Anda semakin kuat!";
+        }
+
+        function updateChart(q) {
+            const ctx = document.getElementById('trigChart').getContext('2d');
+            const labels = []; const data = [];
+            for (let i = 0; i <= 360; i += 5) {
+                labels.push(i);
+                // Rumus: y = A * sin(k * (x + B)) + C
+                // Catatan: B di sini dalam derajat untuk geser fase
+                data.push(q.A * Math.sin(q.k * (i + q.B) * Math.PI / 180) + q.C);
+            }
+            if (chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{ data: data, borderColor: '#818cf8', borderWidth: 2, pointRadius: 0, fill: false, tension: 0.4 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#475569', maxTicksLimit: 6 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        y: { min: -6, max: 6, grid: { color: 'rgba(255,255,255,0.1)' } }
+                    }
+                }
+            });
+        }
+
+        document.getElementById('answer-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (!document.getElementById('submit-btn').classList.contains('hidden')) checkAnswer();
+                else nextQuestion();
+            }
+        });
+    </script>
+</body>
+
+</html>
