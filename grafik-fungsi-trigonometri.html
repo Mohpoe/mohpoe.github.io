@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Grafik Fungsi Trigonometri</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        canvas { background: #ffffff; border-radius: 8px; cursor: crosshair; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen pb-10">
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white py-6 shadow-lg mb-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl font-bold">Kuis Grafik Trigonometri</h1>
+            <p class="mt-2 opacity-90">Tentukan persamaan fungsi $\sin(x)$ atau $\cos(x)$ berdasarkan grafik yang muncul.</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-3xl">
+        <!-- Progress Bar -->
+        <div class="mb-6">
+            <div class="flex justify-between mb-2 text-sm font-medium text-slate-600">
+                <span id="progress-text">Soal 1 dari 10</span>
+                <span id="score-text">Skor: 0</span>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-blue-500 h-2.5 rounded-full" style="width: 10%"></div>
+            </div>
+        </div>
+
+        <!-- Quiz Card -->
+        <div id="quiz-container" class="bg-white rounded-xl shadow-md p-6 mb-6">
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-4">Perhatikan grafik di bawah ini:</h2>
+                <div class="relative overflow-hidden border border-slate-200 rounded-lg">
+                    <canvas id="trigCanvas" width="600" height="300" class="w-full h-auto"></canvas>
+                </div>
+                <p class="text-sm text-slate-500 mt-2 italic text-center text-xs md:text-sm">
+                    Sumbu X dalam derajat (0° ke 360°). Sumbu Y adalah nilai fungsi.
+                </p>
+            </div>
+
+            <div id="options-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Tombol pilihan akan muncul di sini -->
+            </div>
+        </div>
+
+        <!-- Feedback & Navigation -->
+        <div id="feedback" class="hidden p-4 rounded-lg mb-6 text-center font-medium"></div>
+        
+        <button id="next-btn" class="hidden w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition duration-200">
+            Soal Selanjutnya
+        </button>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="hidden bg-white rounded-xl shadow-md p-10 text-center">
+            <h2 class="text-3xl font-bold text-slate-800 mb-4">Kuis Selesai!</h2>
+            <p class="text-xl mb-6">Skor Akhir Anda: <span id="final-score" class="font-bold text-blue-600">0</span> / 100</p>
+            <button onclick="location.reload()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg">
+                Coba Lagi
+            </button>
+        </div>
+    </main>
+
+    <script>
+        const canvas = document.getElementById('trigCanvas');
+        const ctx = canvas.getContext('2d');
+        const optionsGrid = document.getElementById('options-grid');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('next-btn');
+        const progressText = document.getElementById('progress-text');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreDisplay = document.getElementById('score-text');
+
+        let currentQuestion = 0;
+        let score = 0;
+        let questions = [];
+        const TOTAL_QUESTIONS = 10;
+
+        // Inisialisasi Soal
+        function initQuestions() {
+            for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const type = Math.random() > 0.5 ? 'sin' : 'cos';
+                const amp = Math.floor(Math.random() * 3) + 1; // 1, 2, 3
+                const freq = [1, 2][Math.floor(Math.random() * 2)]; // 1 or 2
+                const shift = [0, 30, 45, 90][Math.floor(Math.random() * 4)]; // pergeseran fase horizontal
+                
+                const correctAnswer = {
+                    type: type,
+                    amp: amp,
+                    freq: freq,
+                    shift: shift,
+                    text: `${amp} ${type}(${freq === 1 ? '' : freq}x ${shift === 0 ? '' : (shift > 0 ? '- ' + shift + '°' : '+ ' + Math.abs(shift) + '°')})`.replace(/\(\)/g, '(x)').replace(/\( /g, '(')
+                };
+
+                // Generate distractors
+                let options = [correctAnswer.text];
+                while (options.length < 4) {
+                    const d_type = Math.random() > 0.5 ? 'sin' : 'cos';
+                    const d_amp = Math.floor(Math.random() * 3) + 1;
+                    const d_freq = [1, 2][Math.floor(Math.random() * 2)];
+                    const d_shift = [0, 90][Math.floor(Math.random() * 2)];
+                    const d_text = `${d_amp} ${d_type}(${d_freq === 1 ? '' : d_freq}x ${d_shift === 0 ? '' : '- ' + d_shift + '°'})`.replace(/\(\)/g, '(x)').replace(/\( /g, '(');
+                    
+                    if (!options.includes(d_text)) options.push(d_text);
+                }
+
+                questions.push({
+                    correct: correctAnswer,
+                    options: options.sort(() => Math.random() - 0.5)
+                });
+            }
+        }
+
+        function drawGraph(q) {
+            const w = canvas.width;
+            const h = canvas.height;
+            const padding = 40;
+            
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw Grid
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            
+            // Vertical Lines (Degrees)
+            for (let x = 0; x <= 360; x += 45) {
+                const canvasX = padding + (x / 360) * (w - 2 * padding);
+                ctx.beginPath();
+                ctx.moveTo(canvasX, padding);
+                ctx.lineTo(canvasX, h - padding);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#64748b';
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(x + '°', canvasX, h - padding + 15);
+            }
+
+            // Horizontal Lines (Amplitude)
+            for (let y = -4; y <= 4; y++) {
+                const canvasY = h / 2 - (y * (h - 2 * padding) / 8);
+                ctx.beginPath();
+                ctx.moveTo(padding, canvasY);
+                ctx.lineTo(w - padding, canvasY);
+                ctx.stroke();
+                
+                if (y !== 0) {
+                    ctx.textAlign = 'right';
+                    ctx.fillText(y, padding - 5, canvasY + 3);
+                }
+            }
+
+            // Draw Axes
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            // X-Axis
+            ctx.beginPath();
+            ctx.moveTo(padding, h / 2);
+            ctx.lineTo(w - padding, h / 2);
+            ctx.stroke();
+            // Y-Axis
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, h - padding);
+            ctx.stroke();
+
+            // Draw Function
+            ctx.beginPath();
+            ctx.strokeStyle = '#2563eb';
+            ctx.lineWidth = 3;
+
+            const { type, amp, freq, shift } = q.correct;
+
+            for (let xDegrees = 0; xDegrees <= 360; xDegrees++) {
+                const xRad = (xDegrees - shift) * (Math.PI / 180) * freq;
+                const val = type === 'sin' ? Math.sin(xRad) : Math.cos(xRad);
+                const yVal = amp * val;
+
+                const canvasX = padding + (xDegrees / 360) * (w - 2 * padding);
+                const canvasY = h / 2 - (yVal * (h - 2 * padding) / 8);
+
+                if (xDegrees === 0) ctx.moveTo(canvasX, canvasY);
+                else ctx.lineTo(canvasX, canvasY);
+            }
+            ctx.stroke();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            feedback.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            optionsGrid.innerHTML = '';
+            
+            drawGraph(q);
+            
+            progressText.innerText = `Soal ${currentQuestion + 1} dari ${TOTAL_QUESTIONS}`;
+            progressBar.style.width = `${((currentQuestion + 1) / TOTAL_QUESTIONS) * 100}%`;
+            scoreDisplay.innerText = `Skor: ${score}`;
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 border-2 border-slate-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition font-medium text-slate-700 text-lg";
+                // Menggunakan innerHTML untuk support simbol matematika sederhana jika perlu
+                btn.innerText = `y = ${opt}`;
+                btn.onclick = () => checkAnswer(opt, btn);
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, btn) {
+            const correct = questions[currentQuestion].correct.text;
+            const buttons = optionsGrid.querySelectorAll('button');
+            
+            buttons.forEach(b => b.disabled = true);
+
+            if (selected === correct) {
+                score += 10;
+                btn.classList.replace('border-slate-200', 'border-green-500');
+                btn.classList.add('bg-green-50', 'text-green-700');
+                showFeedback(true, `Benar! Persamaannya adalah y = ${correct}`);
+            } else {
+                btn.classList.replace('border-slate-200', 'border-red-500');
+                btn.classList.add('bg-red-50', 'text-red-700');
+                showFeedback(false, `Salah. Jawaban yang benar adalah y = ${correct}`);
+            }
+
+            nextBtn.classList.remove('hidden');
+            scoreDisplay.innerText = `Skor: ${score}`;
+        }
+
+        function showFeedback(isCorrect, msg) {
+            feedback.innerText = msg;
+            feedback.className = `p-4 rounded-lg mb-6 text-center font-medium ${isCorrect ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+            feedback.classList.remove('hidden');
+        }
+
+        nextBtn.onclick = () => {
+            currentQuestion++;
+            if (currentQuestion < TOTAL_QUESTIONS) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        };
+
+        function showResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            feedback.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            document.getElementById('final-score').innerText = score;
+        }
+
+        // Jalankan Kuis
+        initQuestions();
+        loadQuestion();
+    </script>
+</body>
+</html>
